@@ -1,7 +1,10 @@
 import express from "express";
 import { createConnection } from "mysql";
 import bluebird from "bluebird";
+
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => res.send("hello world"));
 
@@ -44,8 +47,11 @@ app.post("/message", async (req, res) => {
 
   await connection.connectAsync();
 
-  let message = "omkar";
-  let reply = 0;
+  // let message = "omkar";
+  // let reply = 0;
+
+  let message = req.body.message;
+  let reply = req.body.reply;
 
   let sql = `insert into message(message,reply)values('${message}','${reply}')`;
   await connection.queryAsync(sql);
